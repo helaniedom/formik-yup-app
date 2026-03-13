@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 const signInValidationSchema = Yup.object({
     email: Yup.string()
+        .trim()
         .email("Enter a valid email")
         .required("Email is required"),
     password: Yup.string()

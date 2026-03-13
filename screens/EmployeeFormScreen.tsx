@@ -4,14 +4,17 @@ import * as Yup from "yup";
 
 const employeeValidationSchema = Yup.object({
     fullName: Yup.string()
+        .trim()
         .required("Full name is required")
         .min(2, "Full name must be at least 2 characters"),
 
     employeeId: Yup.string()
+        .trim()
         .required("Employee ID is required")
         .min(3, "Employee ID must be at least 3 characters"),
 
     email: Yup.string()
+        .trim()
         .email("Enter a valid email")
         .required("Email is required"),
 
@@ -21,6 +24,7 @@ const employeeValidationSchema = Yup.object({
         .matches(/^\d+$/, "Phone number must contain only digits"),
 
     department: Yup.string()
+        .trim()
         .required("Department is required")
         .min(2, "Department must be at least 2 characters"),
 });
