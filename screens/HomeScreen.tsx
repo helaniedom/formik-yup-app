@@ -4,7 +4,9 @@ export default function HomeScreen({ navigation }: any) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Advanced Forms App</Text>
-            <Text style={styles.subtitle}>Project setup is working.</Text>
+            <Text style={styles.subtitle}>by: Crescia, Helanie, & Paras</Text>
+
+            <Text style={styles.subtitle}>Select a form to continue</Text>
 
             <Pressable onPress={() => navigation.navigate("SignIn")}>
                 <Text>Go to Sign In</Text>
