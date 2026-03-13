@@ -1,5 +1,5 @@
-import HomeScreen from "../screens/HomeScreen";
+import EmployeeFormScreen from "../screens/EmployeeFormScreen";
 
 export default function Index() {
-  return <HomeScreen />;
+  return <EmployeeFormScreen />;
 }
