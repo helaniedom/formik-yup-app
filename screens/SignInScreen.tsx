@@ -20,6 +20,7 @@ export default function SignInScreen({ navigation }: any) {
             <Formik
                 initialValues={{ email: "", password: "" }}
                 validationSchema={signInValidationSchema}
+                validateonMount={true}
                 onSubmit={(values) => {
                 console.log("Sign In Submitted:", values);
                 }}
