@@ -44,7 +44,7 @@ export default function EmployeeFormScreen() {
                 }}
             >
 
-                {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
                     <View>
                         <TextInput
                             style={styles.input}
@@ -78,6 +78,10 @@ export default function EmployeeFormScreen() {
                             value={values.email}
                         />
 
+                        {touched.email && errors.email && (
+                            <Text>{errors.email}</Text>
+                        )}
+
                         <TextInput
                             style={styles.input}
                             placeholder="Phone Number"
@@ -86,6 +90,10 @@ export default function EmployeeFormScreen() {
                             value={values.phoneNumber}
                         />
 
+                        {touched.phoneNumber && errors.phoneNumber && (
+                            <Text>{errors.phoneNumber}</Text>
+                        )}
+
                         <TextInput
                             style={styles.input}
                             placeholder="Department"
@@ -93,6 +101,10 @@ export default function EmployeeFormScreen() {
                             onBlur={handleBlur("department")}
                             value={values.department}
                         />
+
+                        {touched.department && errors.department && (
+                            <Text>{errors.department}</Text>
+                        )}
 
                         <Pressable style={styles.button} onPress={() => handleSubmit()}>
                             <Text style={styles.buttonText}>Submit</Text>
