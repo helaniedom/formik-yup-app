@@ -17,7 +17,8 @@ const employeeValidationSchema = Yup.object({
 
     phoneNumber: Yup.string()
         .required("Phone number is required")
-        .min(10, "Phone number must be at least 10 digits"),
+        .min(10, "Phone number must be at least 10 digits")
+        .matches(/^\d+$/, "Phone number must contain only digits"),
 
     department: Yup.string()
         .required("Department is required")
@@ -39,6 +40,7 @@ export default function EmployeeFormScreen() {
                     department: "",
                 }}
                 validationSchema={employeeValidationSchema}
+                validateOnMount={true}
                 onSubmit={(values) => {
                     console.log(values);
                 }}
@@ -106,7 +108,11 @@ export default function EmployeeFormScreen() {
                             <Text>{errors.department}</Text>
                         )}
 
-                        <Pressable style={styles.button} onPress={() => handleSubmit()}>
+                        <Pressable
+                            style={styles.button}
+                            onPress={() => handleSubmit()}
+                            disabled={!isValid}
+                        >
                             <Text style={styles.buttonText}>Submit</Text>
                         </Pressable>
                     </View>
@@ -143,6 +149,7 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 6,
         alignItems: "center",
+        backgroundColor: "#cccccc",
     },
     buttonText: {
         fontWeight: "bold",
