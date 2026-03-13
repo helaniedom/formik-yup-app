@@ -1,5 +1,5 @@
-import EmployeeFormScreen from "../screens/EmployeeFormScreen";
+import AppNavigator from "../navigation/AppNavigator";
 
 export default function Index() {
-  return <EmployeeFormScreen />;
+  return <AppNavigator/>;
 }
