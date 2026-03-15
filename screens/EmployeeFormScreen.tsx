@@ -44,7 +44,7 @@ export default function EmployeeFormScreen() {
           <Ionicons name="document-text-outline" size={30} color="#007AFF" />
         </View>
 
-        <Text style={styles.title}>Enter employee information</Text>
+        <Text style={styles.title}>Employee Form</Text>
         <Text style={styles.subtitle}>
           Enter employee information with a clean and professional form layout.
         </Text>

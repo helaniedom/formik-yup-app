@@ -11,17 +11,16 @@ export default function HomeScreen({ navigation }: any) {
 
         <Text style={styles.title}>Advanced Forms App</Text>
         <Text style={styles.subtitle}>by Crescia, Helanie, & Paras</Text>
-
         <Text style={styles.description}>
-          Choose a form below
+          Choose a form below to explore beautiful, user-friendly form screens.
         </Text>
       </View>
 
       <View style={styles.buttonContainer}>
-
         <Pressable
           style={({ pressed }) => [
             styles.navButton,
+            styles.signInButton,
             pressed && styles.buttonPressed,
           ]}
           onPress={() => navigation.navigate("SignIn")}
@@ -30,19 +29,18 @@ export default function HomeScreen({ navigation }: any) {
             <View style={styles.smallIconCircle}>
               <Ionicons name="log-in-outline" size={20} color="#007AFF" />
             </View>
-
             <View>
-              <Text style={styles.navButtonTitle}>Sign In</Text>
-              <Text style={styles.navButtonSubtitle}>Access existing account</Text>
+              <Text style={styles.navButtonTitle}>Sign In Form</Text>
+              <Text style={styles.navButtonSubtitle}>Access an existing account</Text>
             </View>
           </View>
-
           <Ionicons name="chevron-forward" size={22} color="#888" />
         </Pressable>
 
         <Pressable
           style={({ pressed }) => [
             styles.navButton,
+            styles.signUpButton,
             pressed && styles.buttonPressed,
           ]}
           onPress={() => navigation.navigate("SignUp")}
@@ -51,19 +49,18 @@ export default function HomeScreen({ navigation }: any) {
             <View style={styles.smallIconCircle}>
               <Ionicons name="person-add-outline" size={20} color="#007AFF" />
             </View>
-
             <View>
-              <Text style={styles.navButtonTitle}>Sign Up</Text>
-              <Text style={styles.navButtonSubtitle}>Create new account</Text>
+              <Text style={styles.navButtonTitle}>Sign Up Form</Text>
+              <Text style={styles.navButtonSubtitle}>Create a brand new account</Text>
             </View>
           </View>
-
           <Ionicons name="chevron-forward" size={22} color="#888" />
         </Pressable>
 
         <Pressable
           style={({ pressed }) => [
             styles.navButton,
+            styles.employeeButton,
             pressed && styles.buttonPressed,
           ]}
           onPress={() => navigation.navigate("EmployeeForm")}
@@ -72,16 +69,13 @@ export default function HomeScreen({ navigation }: any) {
             <View style={styles.smallIconCircle}>
               <Ionicons name="document-text-outline" size={20} color="#007AFF" />
             </View>
-
             <View>
               <Text style={styles.navButtonTitle}>Employee Form</Text>
-              <Text style={styles.navButtonSubtitle}>Enter employee details</Text>
+              <Text style={styles.navButtonSubtitle}>Enter employee information</Text>
             </View>
           </View>
-
           <Ionicons name="chevron-forward" size={22} color="#888" />
         </Pressable>
-
       </View>
     </View>
   );
@@ -94,7 +88,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
-
   heroCard: {
     backgroundColor: "#ffffff",
     borderRadius: 24,
@@ -108,7 +101,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 5,
   },
-
   iconCircle: {
     width: 74,
     height: 74,
@@ -118,7 +110,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 18,
   },
-
   title: {
     fontSize: 30,
     fontWeight: "bold",
@@ -126,7 +117,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
   },
-
   subtitle: {
     fontSize: 15,
     color: "#007AFF",
@@ -134,7 +124,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-
   description: {
     fontSize: 14,
     color: "#666",
@@ -142,11 +131,9 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     paddingHorizontal: 8,
   },
-
   buttonContainer: {
     gap: 14,
   },
-
   navButton: {
     backgroundColor: "#fff",
     borderRadius: 18,
@@ -161,18 +148,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-
+  signInButton: {},
+  signUpButton: {},
+  employeeButton: {},
   buttonPressed: {
     opacity: 0.88,
     transform: [{ scale: 0.98 }],
   },
-
   buttonLeft: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    flexShrink: 1,
   },
-
   smallIconCircle: {
     width: 42,
     height: 42,
@@ -181,14 +169,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   navButtonTitle: {
     fontSize: 16,
     fontWeight: "700",
     color: "#111",
     marginBottom: 2,
   },
-
   navButtonSubtitle: {
     fontSize: 13,
     color: "#666",
