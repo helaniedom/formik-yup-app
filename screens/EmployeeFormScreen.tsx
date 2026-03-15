@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -31,6 +32,8 @@ const employeeValidationSchema = Yup.object({
 
 
 export default function EmployeeFormScreen() {
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Employee Information Form</Text>
@@ -45,75 +48,123 @@ export default function EmployeeFormScreen() {
                 }}
                 validationSchema={employeeValidationSchema}
                 validateOnMount={true}
+                validateOnChange={true}
+                validateOnBlur={true}
                 onSubmit={(values) => {
                     console.log(values);
                 }}
             >
 
                 {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
-                    <View>
+                    <View style={{ width: "100%" }}>
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                focusedField === "fullName" && styles.inputFocused,
+                                touched.fullName && errors.fullName ? styles.inputError : null,
+                                ]}
+                            
                             placeholder="Full Name"
+                            onFocus={() => setFocusedField("fullName")}
                             onChangeText={handleChange("fullName")}
-                            onBlur={handleBlur("fullName")}
+                            onBlur={(e) => {
+                                handleBlur("fullName")(e);
+                                setFocusedField(null);
+                            }}
                             value={values.fullName}
                         />
 
                         {touched.fullName && errors.fullName && (
-                            <Text>{errors.fullName}</Text>
+                            <Text style={styles.errorText}>{errors.fullName}</Text>
                         )}
 
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                focusedField === "employeeId" && styles.inputFocused,
+                                touched.employeeId && errors.employeeId ? styles.inputError : null,
+                            ]}
+                                
                             placeholder="Employee ID"
+                            onFocus={() => setFocusedField("employeeId")}
                             onChangeText={handleChange("employeeId")}
-                            onBlur={handleBlur("employeeId")}
+                            onBlur={(e) => {
+                                handleBlur("employeeId")(e);
+                                setFocusedField(null);
+                            }}
                             value={values.employeeId}
                         />
 
                         {touched.employeeId && errors.employeeId && (
-                            <Text>{errors.employeeId}</Text>
+                            <Text style={styles.errorText}>{errors.employeeId}</Text>
                         )}
 
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                focusedField === "email" && styles.inputFocused,
+                                touched.email && errors.email ? styles.inputError : null,
+                            ]}
+
                             placeholder="Email"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            onFocus={() => setFocusedField("email")}
                             onChangeText={handleChange("email")}
-                            onBlur={handleBlur("email")}
+                            onBlur={(e) => {
+                                handleBlur("email")(e);
+                                setFocusedField(null);
+                            }}
                             value={values.email}
                         />
 
                         {touched.email && errors.email && (
-                            <Text>{errors.email}</Text>
+                            <Text style={styles.errorText}>{errors.email}</Text>
                         )}
 
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                focusedField === "phoneNumber" && styles.inputFocused,
+                                touched.phoneNumber && errors.phoneNumber ? styles.inputError : null,
+                            ]}
                             placeholder="Phone Number"
+                            keyboardType="phone-pad"
+                            onFocus={() => setFocusedField("phoneNumber")}
                             onChangeText={handleChange("phoneNumber")}
-                            onBlur={handleBlur("phoneNumber")}
+                            onBlur={(e) => {
+                                handleBlur("phoneNumber")(e);
+                                setFocusedField(null);
+                            }}
                             value={values.phoneNumber}
                         />
 
                         {touched.phoneNumber && errors.phoneNumber && (
-                            <Text>{errors.phoneNumber}</Text>
+                            <Text style={styles.errorText}>{errors.phoneNumber}</Text>
                         )}
 
                         <TextInput
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                focusedField === "department" && styles.inputFocused,
+                                touched.department && errors.department ? styles.inputError : null,
+                            ]}
                             placeholder="Department"
+                            onFocus={() => setFocusedField("department")}
                             onChangeText={handleChange("department")}
-                            onBlur={handleBlur("department")}
+                            onBlur={(e) => {
+                                handleBlur("department")(e);
+                                setFocusedField(null);
+                            }}
                             value={values.department}
                         />
 
                         {touched.department && errors.department && (
-                            <Text>{errors.department}</Text>
+                            <Text style={styles.errorText}>{errors.department}</Text>
                         )}
 
                         <Pressable
-                            style={styles.button}
+                            style={[styles.button, !isValid && styles.buttonDisabled]}
                             onPress={() => handleSubmit()}
                             disabled={!isValid}
                         >
@@ -129,33 +180,50 @@ export default function EmployeeFormScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
         padding: 20,
+        justifyContent: "center",
+        backgroundColor: "#fff",
     },
     title: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: "bold",
-        marginBottom: 10,
-    },
-    subtitle: {
-        fontSize: 16,
+        marginBottom: 20,
         textAlign: "center",
     },
     input: {
         width: "100%",
         borderWidth: 1,
-        padding: 10,
-        marginBottom: 12,
-        borderRadius: 6,
+        borderColor: "#ccc",
+        padding: 12,
+        marginBottom: 10,
+        borderRadius: 10,
+        backgroundColor: "#f9f9f9",
+    },
+    inputFocused: {
+        borderColor: "#007AFF",
+        borderWidth: 2,
+    },
+    inputError: {
+        borderColor: "red",
+    },
+    errorText: {
+        color: "red",
+        marginBottom: 10,
+        fontSize: 13,
     },
     button: {
-        padding: 12,
-        borderRadius: 6,
+        backgroundColor: "#007AFF",
+        padding: 14,
+        borderRadius: 10,
         alignItems: "center",
-        backgroundColor: "#cccccc",
+        marginTop: 10,
+    },
+    buttonDisabled: {
+        backgroundColor: "#a0cfff",
     },
     buttonText: {
+        color: "white",
         fontWeight: "bold",
+        fontSize: 16,
     },
 });

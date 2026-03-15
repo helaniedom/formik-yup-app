@@ -1,7 +1,8 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import * as Yup from "yup";
+import { Ionicons } from "@expo/vector-icons";
 
 const signInValidationSchema = Yup.object({
     email: Yup.string()
@@ -14,6 +15,9 @@ const signInValidationSchema = Yup.object({
 });
 
 export default function SignInScreen({ navigation }: any) {
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <View style={styles.container}>
         <Text style={styles.title}>Sign In</Text>
@@ -22,6 +26,8 @@ export default function SignInScreen({ navigation }: any) {
                 initialValues={{ email: "", password: "" }}
                 validationSchema={signInValidationSchema}
                 validateOnMount={true}
+                validateOnChange={true}
+                validateOnBlur={true}
                 onSubmit={(values) => {
                 console.log("Sign In Submitted:", values);
                 }}
@@ -31,28 +37,54 @@ export default function SignInScreen({ navigation }: any) {
                 <>
                     <TextInput style={[
                         styles.input,
+                        focusedField === "email" && styles.inputFocused,
                         touched.email && errors.email ? styles.inputError : null,
                     ]}
                     placeholder="Email"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
+                    onFocus={() => setFocusedField("email")}
+                    onBlur={(e) => {
+                        handleBlur("email")(e);
+                        setFocusedField(null);
+                    }}
                     value={values.email}
                     />
                     {touched.email && errors.email && (
                     <Text style={styles.errorText}>{errors.email}</Text>
                     )}
 
-                    <TextInput
-                    style={[ styles.input, touched.password && errors.password ? styles.inputError : null,
-                    ]}
-                    placeholder="Password"
-                    secureTextEntry
-                    onChangeText={handleChange("password")}
-                    onBlur={handleBlur("password")}
-                    value={values.password}
-                    />
+                    <View
+                        style={[
+                            styles.passwordContainer,
+                            focusedField === "password" && styles.inputFocused,
+                            touched.password && errors.password ? styles.inputError : null,
+                        ]}
+                    >
+
+                        <TextInput
+                            style={[styles.passwordInput,]}
+                            placeholder="Password"
+                            secureTextEntry={!showPassword}
+                            onChangeText={handleChange("password")}
+                            onFocus={() => setFocusedField("password")}
+                            onBlur={(e) => {
+                                handleBlur("password")(e);
+                                setFocusedField(null);
+                            }}
+                            value={values.password}
+                        />
+                        <Pressable onPress={() => setShowPassword(!showPassword)}>
+                            <Ionicons
+                                name={showPassword ? "eye-off-outline" : "eye-outline"}
+                                size={22}
+                                color="#666"
+                            />
+                        </Pressable>
+                    </View>
+
+
                     {touched.password && errors.password && (
                     <Text style={styles.errorText}>{errors.password}</Text>
                     )}
@@ -67,6 +99,10 @@ export default function SignInScreen({ navigation }: any) {
 
                     <Pressable onPress={() => navigation.navigate("SignUp")}>
                     <Text style={styles.linkText}>Don’t have an account? Sign Up</Text>
+                    </Pressable>
+
+                    <Pressable onPress={() => navigation.navigate("EmployeeForm")}>
+                    <Text style={styles.linkText}>Go to Employee Form</Text>
                     </Pressable>
                 </>
                 )}
@@ -92,6 +128,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 12,
         marginBottom: 10, backgroundColor: "#f9f9f9",
+    },
+    inputFocused: {
+        borderColor: "#007AFF",
+        borderWidth: 2,
     },
     inputError: {
         borderColor: "red",
@@ -119,5 +159,19 @@ const styles = StyleSheet.create({
         color: "#007AFF",
         textAlign: "center",
         marginTop: 15,
+    },
+    passwordContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 10,
+        backgroundColor: "#f9f9f9",
+        paddingHorizontal: 12,
+        marginBottom: 10,
+    },
+    passwordInput: {
+        flex: 1,
+        paddingVertical: 12,
     },
 });
