@@ -1,243 +1,302 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import * as Yup from "yup";
 import { Ionicons } from "@expo/vector-icons";
 
 const signUpValidationSchema = Yup.object({
-    fullName: Yup.string()
-        .trim()
-        .min(2, "Full name must be at least 2 characters")
-        .required("Full name is required"),
-    email: Yup.string()
-        .trim()
-        .email("Enter a valid email")
-        .required("Email is required"),
-    password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
-        .required("Password is required"),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password")], "Passwords must match")
-        .required("Confirm password is required"),
-    });
+  fullName: Yup.string()
+    .trim()
+    .min(2, "Full name must be at least 2 characters")
+    .required("Full name is required"),
+  email: Yup.string()
+    .trim()
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
+});
 
-    export default function SignUpScreen({ navigation }: any) {
-        const [focusedField, setFocusedField] = useState<string | null>(null);
-        const [showPassword, setShowPassword] = useState(false);
-        const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+export default function SignUpScreen({ navigation }: any) {
+  const [focusedField, setFocusedField] = useState("");
 
-    return (
-        <View style={styles.container}>
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.card}>
+        <View style={styles.iconCircle}>
+          <Ionicons name="person-add-outline" size={30} color="#007AFF" />
+        </View>
+
         <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.subtitle}>
+          Create a new account and get started with the app.
+        </Text>
 
         <Formik
-            initialValues={{
+          initialValues={{
             fullName: "",
             email: "",
             password: "",
             confirmPassword: "",
-            }}
-            validationSchema={signUpValidationSchema}
-            validateOnMount={true}
-            validateOnChange={true}
-            validateOnBlur={true}
-            onSubmit={(values) => {
+          }}
+          validationSchema={signUpValidationSchema}
+          validateOnMount={true}
+          onSubmit={(values) => {
             console.log("Sign Up Submitted:", values);
-            }}
+          }}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid, }) => (
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
             <>
+              <View style={styles.inputWrapper}>
+                <Ionicons name="person-outline" size={20} color="#007AFF" style={styles.inputIcon} />
                 <TextInput
-                style={[
+                  style={[
                     styles.input,
                     focusedField === "fullName" && styles.inputFocused,
                     touched.fullName && errors.fullName ? styles.inputError : null,
-                ]}
-                placeholder="Full Name"
-                onChangeText={handleChange("fullName")}
-                onFocus={() => setFocusedField("fullName")}
-                onBlur={(e) => {
-                    handleBlur("fullName")(e);
-                    setFocusedField(null);
-                }}
-                value={values.fullName}
+                  ]}
+                  placeholder="Full Name"
+                  placeholderTextColor="#8a8a8a"
+                  onChangeText={handleChange("fullName")}
+                  onFocus={() => setFocusedField("fullName")}
+                  onBlur={() => {
+                    handleBlur("fullName");
+                    setFocusedField("");
+                  }}
+                  value={values.fullName}
                 />
-                {touched.fullName && errors.fullName && (
+              </View>
+              {touched.fullName && errors.fullName && (
                 <Text style={styles.errorText}>{errors.fullName}</Text>
-                )}
+              )}
 
+              <View style={styles.inputWrapper}>
+                <Ionicons name="mail-outline" size={20} color="#007AFF" style={styles.inputIcon} />
                 <TextInput
-                style={[
+                  style={[
                     styles.input,
                     focusedField === "email" && styles.inputFocused,
                     touched.email && errors.email ? styles.inputError : null,
-                ]}
-                placeholder="Email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                onChangeText={handleChange("email")}
-                onFocus={() => setFocusedField("email")}
-                onBlur={(e) => {
-                    handleBlur("email")(e);
-                    setFocusedField(null);
-                }}
-                value={values.email}
+                  ]}
+                  placeholder="Email"
+                  placeholderTextColor="#8a8a8a"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  onChangeText={handleChange("email")}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => {
+                    handleBlur("email");
+                    setFocusedField("");
+                  }}
+                  value={values.email}
                 />
-                {touched.email && errors.email && (
+              </View>
+              {touched.email && errors.email && (
                 <Text style={styles.errorText}>{errors.email}</Text>
-                )}
+              )}
 
-                <View
-                    style={[
-                        styles.passwordContainer,
-                        focusedField === "password" && styles.inputFocused,
-                        touched.password && errors.password ? styles.inputError : null,
-                    ]}
-                >
-
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholder="Password"
-                        secureTextEntry={!showPassword}
-                        onChangeText={handleChange("password")}
-                        onFocus={() => setFocusedField("password")}
-                        onBlur={(e) => {
-                            handleBlur("password")(e);
-                            setFocusedField(null);
-                        }}
-                        value={values.password}
-                    />
-                    <Pressable onPress={() => setShowPassword(!showPassword)}>
-                        <Ionicons
-                            name={showPassword ? "eye-off-outline" : "eye-outline"}
-                            size={22}
-                            color="#666"
-                        />
-                    </Pressable>
-                </View>
-                
-                {touched.password && errors.password && (
+              <View style={styles.inputWrapper}>
+                <Ionicons name="lock-closed-outline" size={20} color="#007AFF" style={styles.inputIcon} />
+                <TextInput
+                  style={[
+                    styles.input,
+                    focusedField === "password" && styles.inputFocused,
+                    touched.password && errors.password ? styles.inputError : null,
+                  ]}
+                  placeholder="Password"
+                  placeholderTextColor="#8a8a8a"
+                  secureTextEntry
+                  onChangeText={handleChange("password")}
+                  onFocus={() => setFocusedField("password")}
+                  onBlur={() => {
+                    handleBlur("password");
+                    setFocusedField("");
+                  }}
+                  value={values.password}
+                />
+              </View>
+              {touched.password && errors.password && (
                 <Text style={styles.errorText}>{errors.password}</Text>
-                )}
+              )}
 
-                <View 
-                    style={[styles.passwordContainer,
+              <View style={styles.inputWrapper}>
+                <Ionicons name="shield-checkmark-outline" size={20} color="#007AFF" style={styles.inputIcon} />
+                <TextInput
+                  style={[
+                    styles.input,
                     focusedField === "confirmPassword" && styles.inputFocused,
                     touched.confirmPassword && errors.confirmPassword ? styles.inputError : null,
-                    ]}
-                >
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholder="Confirm Password"
-                        secureTextEntry={!showConfirmPassword}
-                        onChangeText={handleChange("confirmPassword")}
-                        onFocus={() => setFocusedField("confirmPassword")}
-                        onBlur={(e) => {
-                            handleBlur("confirmPassword")(e);
-                            setFocusedField(null);
-                        }}
-                        value={values.confirmPassword}
-                    />
-                    <Pressable onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                        <Ionicons
-                            name={showConfirmPassword ? "eye-off-outline" : "eye-outline"}
-                            size={22}
-                            color="#666"
-                        />
-                    </Pressable>
-                </View>
+                  ]}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#8a8a8a"
+                  secureTextEntry
+                  onChangeText={handleChange("confirmPassword")}
+                  onFocus={() => setFocusedField("confirmPassword")}
+                  onBlur={() => {
+                    handleBlur("confirmPassword");
+                    setFocusedField("");
+                  }}
+                  value={values.confirmPassword}
+                />
+              </View>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              )}
 
-                {touched.confirmPassword && errors.confirmPassword && (
-                    <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-                )}
-
-                <Pressable
-                style={[styles.button, !isValid && styles.buttonDisabled]}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.button,
+                  !isValid && styles.buttonDisabled,
+                  pressed && isValid && styles.buttonPressed,
+                ]}
                 onPress={() => handleSubmit()}
                 disabled={!isValid}
-                >
-                <Text style={styles.buttonText}>Sign Up</Text>
-                </Pressable>
+              >
+                <Text style={styles.buttonText}>Create Account</Text>
+                <Ionicons name="arrow-forward" size={18} color="#fff" />
+              </Pressable>
 
-                <Pressable onPress={() => navigation.navigate("SignIn")}>
+              <Pressable
+                style={styles.linkRow}
+                onPress={() => navigation.navigate("SignIn")}
+              >
                 <Text style={styles.linkText}>Already have an account? Sign In</Text>
-                </Pressable>
-
-                <Pressable onPress={() => navigation.navigate("EmployeeForm")}>
-                <Text style={styles.linkText}>Go to Employee Form</Text>
-                </Pressable>
+              </Pressable>
             </>
-            )}
+          )}
         </Formik>
-        </View>
-    );
-    }
+      </View>
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        justifyContent: "center",
-        backgroundColor: "#fff",
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: "bold",
-        marginBottom: 20,
-        textAlign: "center",
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 10,
-        padding: 12,
-        marginBottom: 10,
-        backgroundColor: "#f9f9f9",
-    },
-    inputFocused: {
-        borderColor: "#007AFF",
-        borderWidth: 2,
-    },
-    inputError: {
-        borderColor: "red",
-    },
-    errorText: {
-        color: "red",
-        marginBottom: 10,
-        fontSize: 13,
-    },
-    button: {
-        backgroundColor: "#007AFF",
-        padding: 14,
-        borderRadius: 10,
-        alignItems: "center",
-        marginTop: 10,
-    },
-    buttonDisabled: {
-        backgroundColor: "#a0cfff",
-    },
-    buttonText: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 16,
-    },
-    linkText: {
-        color: "#007AFF",
-        textAlign: "center",
-        marginTop: 15,
-    },
-    passwordContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 10,
-        backgroundColor: "#f9f9f9",
-        paddingHorizontal: 12,
-        marginBottom: 10,
-    },
-    passwordInput: {
-        flex: 1,
-        paddingVertical: 12,
-    },
+  container: {
+    flexGrow: 1,
+    backgroundColor: "#f4f7fb",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    paddingVertical: 28,
+    paddingHorizontal: 22,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 5,
+  },
+  iconCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: "#eaf3ff",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 18,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#111",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
+    lineHeight: 22,
+    marginBottom: 24,
+    paddingHorizontal: 6,
+  },
+  inputWrapper: {
+    position: "relative",
+    marginBottom: 8,
+  },
+  inputIcon: {
+    position: "absolute",
+    left: 14,
+    top: 15,
+    zIndex: 1,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#d9e2ef",
+    borderRadius: 16,
+    backgroundColor: "#f9fbff",
+    paddingVertical: 14,
+    paddingLeft: 46,
+    paddingRight: 14,
+    fontSize: 15,
+    color: "#111",
+  },
+  inputFocused: {
+    borderColor: "#007AFF",
+    backgroundColor: "#fff",
+  },
+  inputError: {
+    borderColor: "#e53935",
+    backgroundColor: "#fff5f5",
+  },
+  errorText: {
+    color: "#e53935",
+    fontSize: 13,
+    marginBottom: 12,
+    marginLeft: 4,
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    borderRadius: 16,
+    paddingVertical: 15,
+    marginTop: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
+    shadowColor: "#007AFF",
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
+  },
+  buttonDisabled: {
+    backgroundColor: "#9ec9ff",
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  buttonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  linkRow: {
+    marginTop: 18,
+    alignItems: "center",
+  },
+  linkText: {
+    color: "#007AFF",
+    fontSize: 14,
+    fontWeight: "600",
+  },
 });
